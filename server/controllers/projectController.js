@@ -1,4 +1,5 @@
 const Project = require("../models/Project");
+const Task = require("../models/Task");
 
 const createProject = async (req, res) => {
   try {
@@ -15,31 +16,100 @@ const createProject = async (req, res) => {
     });
   }
 };
-
 const getProjects = async (req, res) => {
   try {
     const projects = await Project.find({
-      owner: req.user.id,
-    }).sort({ createdAt: -1 });
+      owner: req.user.id
+    });
 
-    res.json(projects);
+    const projectData = await Promise.all(
+      projects.map(async (project) => {
+
+        const tasks = await Task.find({
+          projectId: project._id
+        });
+
+        const totalTasks = tasks.length;
+
+        const completedTasks = tasks.filter(
+          task => task.status === "Done"
+        ).length;
+
+        const pendingTasks = totalTasks - completedTasks;
+
+        const progress =
+          totalTasks === 0
+            ? 0
+            : Math.round((completedTasks / totalTasks) * 100);
+
+        return {
+          ...project.toObject(),
+          totalTasks,
+          completedTasks,
+          pendingTasks,
+          progress
+        };
+      })
+    );
+
+    res.json(projectData);
+
   } catch (err) {
     res.status(500).json({
-      message: err.message,
+      message: err.message
     });
   }
 };
-
 const getProject = async (req, res) => {
-  try {
-    const project = await Project.findById(req.params.id);
 
-    res.json(project);
-  } catch (err) {
-    res.status(500).json({
-      message: err.message,
-    });
-  }
+    try {
+
+        console.log("Project ID:", req.params.id);
+
+        const project = await Project.findById(req.params.id)
+            .populate("owner", "name email")
+            .populate("members", "name email");
+
+        console.log(project);
+
+        if (!project) {
+            return res.status(404).json({
+                message: "Project Not Found"
+            });
+        }
+
+        const tasks = await Task.find({
+            projectId: project._id
+        })
+        .populate("assignedTo", "name email")
+        .populate("createdBy", "name email");
+
+        console.log(tasks);
+
+        res.json({
+            project,
+            tasks,
+            totalTasks: tasks.length,
+            completedTasks: tasks.filter(t => t.status === "Done").length,
+            pendingTasks: tasks.filter(t => t.status !== "Done").length,
+            progress:
+                tasks.length === 0
+                    ? 0
+                    : Math.round(
+                        tasks.filter(t => t.status === "Done").length * 100 / tasks.length
+                    )
+        });
+
+    } catch (err) {
+
+        console.log(err);
+
+        res.status(500).json({
+            message: err.message
+        });
+
+    }
+
 };
 
 const updateProject = async (req, res) => {

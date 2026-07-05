@@ -1,35 +1,57 @@
 const Task = require("../models/Task");
 const Notification=require("../models/Notification");
+const Project = require("../models/Project");
 
 // Create Task
 const createTask = async (req, res) => {
-  try {
-    const task=await Task.create(req.body);
+    try {
 
-if(task.assignedTo){
+        console.log("req.user =", req.user);
+        console.log("req.body =", req.body);
 
-await Notification.create({
+        const data = {
+            projectId: req.body.projectId,
+            title: req.body.title,
+            description: req.body.description,
+            priority: req.body.priority,
+            dueDate: req.body.dueDate,
+            assignedTo: req.body.assignedTo || null,
+            createdBy: req.user.id
+        };
 
-user:task.assignedTo,
+        console.log("Saving:", data);
 
-project:task.projectId,
+        const task = await Task.create(data);
 
-task:task._id,
+if (task.assignedTo) {
 
-title:"Task Assigned",
+    await Notification.create({
 
-message:`${task.title} has been assigned to you.`,
+        user: task.assignedTo,
 
-type:"TASK_ASSIGNED"
+        project: task.projectId,
 
-});
+        task: task._id,
+
+        title: "Task Assigned",
+
+        message: `You have been assigned "${task.title}".`,
+
+        type: "TASK_ASSIGNED"
+
+    });
+
 }
-    res.status(201).json(task);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
 
+res.status(201).json(task);
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({
+            message: err.message
+        });
+    }
+};
 // Get Tasks of One Project
 const getTasks = async (req, res) => {
   try {
@@ -42,55 +64,117 @@ const getTasks = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+const getDashboardStats = async (req, res) => {
+
+    try {
+
+        const myProjects = await Project.countDocuments({
+
+            owner: req.user.id
+
+        });
+
+        const createdTasks = await Task.countDocuments({
+
+            createdBy: req.user.id
+
+        });
+
+        const assignedTasks = await Task.countDocuments({
+
+            assignedTo: req.user.id
+
+        });
+
+        const completed = await Task.countDocuments({
+
+            assignedTo: req.user.id,
+
+            status: "Done"
+
+        });
+
+        const pending = await Task.countDocuments({
+
+            assignedTo: req.user.id,
+
+            status: {
+                $ne: "Done"
+            }
+
+        });
+
+        res.json({
+
+            myProjects,
+
+            createdTasks,
+
+            assignedTasks,
+
+            completed,
+
+            pending
+
+        });
+
+    } catch (err) {
+
+        res.status(500).json({
+
+            message: err.message
+
+        });
+
+    }
+
+};
 
 // Update Task
-const updateTask = async (req,res)=>{
+const updateTask = async (req, res) => {
 
-try{
+    try {
 
-const task = await Task.findByIdAndUpdate(
+        const task = await Task.findById(req.params.id);
 
-req.params.id,
+        if (!task) {
 
-req.body,
+            return res.status(404).json({
+                message: "Task not found"
+            });
 
-{new:true}
+        }
 
-);
+        // Only assigned user can change status
+        if (
+            req.body.status &&
+            task.assignedTo &&
+            task.assignedTo.toString() !== req.user.id
+        ) {
 
-if(task.assignedTo){
+            return res.status(403).json({
 
-await Notification.create({
+                message: "Only assigned member can update task status."
 
-user:task.assignedTo,
+            });
 
-project:task.projectId,
+        }
 
-task:task._id,
+        Object.assign(task, req.body);
 
-title:"Task Updated",
+        await task.save();
 
-message:`${task.title} has been updated.`,
+        res.json(task);
 
-type:"TASK_UPDATED"
+    } catch (err) {
 
-});
+        res.status(500).json({
 
-}
+            message: err.message
 
-res.json(task);
+        });
 
-}
-
-catch(err){
-
-res.status(500).json({
-
-message:err.message
-
-});
-
-}
+    }
 
 };
 
@@ -118,7 +202,8 @@ const getMyTasks = async (req, res) => {
 
         })
         .populate("projectId", "title")
-        .populate("assignedTo", "name email");
+        .populate("assignedTo", "name email")
+        .populate("createdBy", "name email");
 
         res.json(tasks);
 
@@ -134,9 +219,17 @@ const getMyTasks = async (req, res) => {
 
 };
 module.exports = {
+
     createTask,
+
     getTasks,
+
     updateTask,
+
     deleteTask,
-    getMyTasks
+
+    getMyTasks,
+
+    getDashboardStats
+
 };

@@ -13,15 +13,17 @@ updateTask,
 
 deleteTask,
 
-getMyTasks
+getMyTasks,
 
-}=require("../controllers/taskController");
+getDashboardStats
+
+} = require("../controllers/taskController");
 
 
 router.post("/", auth, createTask);
 
 router.get("/my/tasks", auth, getMyTasks);
-
+router.get("/dashboard/stats", auth, getDashboardStats);
 router.get("/:projectId", auth, getTasks);
 
 router.put("/:id", auth, updateTask);
