@@ -1,0 +1,204 @@
+.projects-page{
+
+    width:100%;
+
+}
+
+.project-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:30px;
+
+}
+
+.project-form{
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:15px;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+
+    margin-bottom:30px;
+
+}
+
+.project-form input,
+.project-form textarea{
+
+    width:100%;
+
+    padding:14px;
+
+    margin-bottom:20px;
+
+    border:1px solid #ddd;
+
+    border-radius:10px;
+
+    font-size:15px;
+
+}
+
+.project-form textarea{
+
+    resize:none;
+
+}
+
+.project-form button{
+
+    background:#2563eb;
+
+    color:white;
+
+    border:none;
+
+    padding:14px 25px;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+}
+
+.project-form button:hover{
+
+    background:#1d4ed8;
+
+}
+
+.project-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fill,minmax(330px,1fr));
+
+    gap:20px;
+
+}
+
+.project-card{
+
+    background:white;
+
+    padding:20px;
+
+    border-radius:15px;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+
+    transition:.3s;
+
+}
+
+.project-card:hover{
+
+    transform:translateY(-6px);
+
+}
+
+.project-top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+.project-top h2{
+
+    color:#2563eb;
+
+}
+
+.status{
+
+    background:#22c55e;
+
+    color:white;
+
+    padding:5px 12px;
+
+    border-radius:20px;
+
+    font-size:13px;
+
+}
+
+.description{
+
+    margin:20px 0;
+
+    color:#555;
+
+    line-height:1.6;
+
+}
+
+.date{
+
+    color:#888;
+
+    font-size:14px;
+
+}
+
+.project-buttons{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-top:20px;
+
+}
+
+.project-buttons button{
+
+    border:none;
+
+    padding:10px 16px;
+
+    border-radius:8px;
+
+    color:white;
+
+    cursor:pointer;
+
+    display:flex;
+
+    gap:8px;
+
+    align-items:center;
+
+}
+
+.open-btn{
+
+    background:#2563eb;
+
+}
+
+.edit-btn{
+
+    background:#f59e0b;
+
+}
+
+.delete-btn{
+
+    background:#ef4444;
+
+}

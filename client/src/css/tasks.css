@@ -1,0 +1,96 @@
+.tasks-page{
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:15px;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+
+}
+
+.tasks-page h1{
+
+    margin-bottom:25px;
+
+}
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+th{
+
+    background:#2563eb;
+
+    color:white;
+
+    padding:15px;
+
+}
+
+td{
+
+    padding:15px;
+
+    border-bottom:1px solid #ddd;
+
+}
+
+.edit{
+
+    background:#f59e0b;
+
+    border:none;
+
+    color:white;
+
+    padding:8px 12px;
+
+    margin-right:10px;
+
+    border-radius:6px;
+
+    cursor:pointer;
+
+}
+
+.delete{
+
+    background:#ef4444;
+
+    border:none;
+
+    color:white;
+
+    padding:8px 12px;
+
+    border-radius:6px;
+
+    cursor:pointer;
+
+}
+.status-lock{
+
+background:#fff3cd;
+
+border:1px solid #ffeeba;
+
+color:#856404;
+
+padding:12px;
+
+border-radius:8px;
+
+margin-top:15px;
+
+font-weight:600;
+
+text-align:center;
+
+}

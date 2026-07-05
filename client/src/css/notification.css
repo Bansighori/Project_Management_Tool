@@ -1,0 +1,115 @@
+/* Page */
+
+.notification-page{
+
+    padding:35px;
+    background:#f4f7fc;
+    min-height:100vh;
+
+}
+
+/* Heading */
+
+.notification-page h1{
+
+    font-size:38px;
+    margin-bottom:30px;
+    color:#1f2937;
+
+}
+
+/* Card */
+
+.notification-card{
+
+    background:#fff;
+    border-radius:15px;
+    padding:22px;
+    margin-bottom:20px;
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+    transition:.3s;
+    border-left:6px solid #2563eb;
+
+}
+
+.notification-card:hover{
+
+    transform:translateY(-4px);
+    box-shadow:0 10px 25px rgba(0,0,0,.12);
+
+}
+
+/* Read Notification */
+
+.notification-card.read{
+
+    opacity:.7;
+    border-left:6px solid #9ca3af;
+
+}
+
+/* Unread */
+
+.notification-card.unread{
+
+    border-left:6px solid #2563eb;
+
+}
+
+.notification-card h3{
+
+    margin-bottom:10px;
+    color:#2563eb;
+    font-size:24px;
+
+}
+
+.notification-card p{
+
+    color:#555;
+    font-size:18px;
+    margin-bottom:15px;
+
+}
+
+.notification-card small{
+
+    color:#888;
+    font-size:14px;
+
+}
+
+/* Button */
+
+.notification-card button{
+
+    margin-top:18px;
+    padding:10px 20px;
+    border:none;
+    border-radius:8px;
+    background:#2563eb;
+    color:#fff;
+    cursor:pointer;
+    font-size:15px;
+    transition:.3s;
+
+}
+
+.notification-card button:hover{
+
+    background:#1d4ed8;
+
+}
+
+/* Empty */
+
+.no-notification{
+
+    background:#fff;
+    padding:50px;
+    border-radius:15px;
+    text-align:center;
+    font-size:22px;
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+
+}
